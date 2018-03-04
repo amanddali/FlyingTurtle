@@ -1,3 +1,5 @@
+package game;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -5,7 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -17,19 +21,31 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	int currentState = MENU_STATE;
 	Font titleFont;
 	Font smallerFont;
+	Turtle turtle;
 	boolean moveRight;
 	boolean moveLeft;
 	boolean moveUp;
 	boolean moveDown;
+	ObjectManager om;
+	public static BufferedImage turtleImg;
+	public static BufferedImage carrotImg;
 
 	GamePanel() {
 		timer = new Timer(1000 / 60, this);
 		titleFont = new Font("Oswald", Font.BOLD, 48);
 		smallerFont = new Font("Oswald", Font.PLAIN, 30);
+		turtle = new Turtle(10, 225, 50, 50);
 		moveRight = false;
 		moveLeft = false;
 		moveUp = false;
 		moveDown = false;
+		om = new ObjectManager(turtle);
+		try {
+			turtleImg = ImageIO.read(this.getClass().getResourceAsStream("turtle.png"));
+			carrotImg = ImageIO.read(this.getClass().getResourceAsStream("carrot.png"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void startGame() {
@@ -69,7 +85,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			currentState += 1;
 			if (currentState == END_STATE) {
-
+				turtle = new Turtle(10, 400, 50, 50);
 			}
 		}
 		if (currentState > END_STATE) {
@@ -90,6 +106,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			moveDown = true;
 		}
+		turtle.update();
 	}
 
 	@Override
@@ -113,7 +130,24 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	public void updateGameState() {
-
+		if (moveRight == true && turtle.x < 940) {
+			turtle.x += turtle.speed;
+		}
+		if (moveLeft == true && turtle.x > 10) {
+			turtle.x -= turtle.speed;
+		}
+		if (moveUp == true && turtle.y > 10) {
+			turtle.y -= turtle.speed;
+		}
+		if (moveDown == true && turtle.y < 440) {
+			turtle.y += turtle.speed;
+		}
+		om.update();
+		om.manageEnemies();
+		om.checkCollision();
+		if (turtle.isAlive == false) {
+			currentState = END_STATE;
+		}
 	}
 
 	public void updateEndState() {
@@ -134,6 +168,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	public void drawGameState(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, FlyingTurtle.WIDTH, FlyingTurtle.HEIGHT);
+		om.draw(g);
 	}
 
 	public void drawEndState(Graphics g) {
