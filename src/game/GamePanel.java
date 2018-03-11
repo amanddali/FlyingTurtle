@@ -22,27 +22,39 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	Font titleFont;
 	Font smallerFont;
 	Turtle turtle;
-	boolean moveRight;
-	boolean moveLeft;
 	boolean moveUp;
 	boolean moveDown;
 	ObjectManager om;
 	public static BufferedImage turtleImg;
 	public static BufferedImage carrotImg;
+	public static BufferedImage charm1Img;
+	public static BufferedImage charm2Img;
+	public static BufferedImage charm3Img;
+	public static BufferedImage charm4Img;
+	public static BufferedImage charm5Img;
+	public static BufferedImage charm6Img;
+	public static BufferedImage charm7Img;
+	public static BufferedImage charm8Img;
 
 	GamePanel() {
 		timer = new Timer(1000 / 60, this);
 		titleFont = new Font("Oswald", Font.BOLD, 48);
 		smallerFont = new Font("Oswald", Font.PLAIN, 30);
-		turtle = new Turtle(10, 225, 50, 50);
-		moveRight = false;
-		moveLeft = false;
+		turtle = new Turtle(150, 225, 50, 50);
 		moveUp = false;
 		moveDown = false;
 		om = new ObjectManager(turtle);
 		try {
 			turtleImg = ImageIO.read(this.getClass().getResourceAsStream("turtle.png"));
 			carrotImg = ImageIO.read(this.getClass().getResourceAsStream("carrot.png"));
+			charm1Img = ImageIO.read(this.getClass().getResourceAsStream("charm1"));
+			charm2Img = ImageIO.read(this.getClass().getResourceAsStream("charm2"));
+			charm3Img = ImageIO.read(this.getClass().getResourceAsStream("charm3"));
+			charm4Img = ImageIO.read(this.getClass().getResourceAsStream("charm4"));
+			charm5Img = ImageIO.read(this.getClass().getResourceAsStream("charm5"));
+			charm6Img = ImageIO.read(this.getClass().getResourceAsStream("charm6"));
+			charm7Img = ImageIO.read(this.getClass().getResourceAsStream("charm7"));
+			charm8Img = ImageIO.read(this.getClass().getResourceAsStream("charm8"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -84,21 +96,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			currentState += 1;
-			if (currentState == END_STATE) {
-				turtle = new Turtle(10, 400, 50, 50);
-			}
 		}
 		if (currentState > END_STATE) {
 			currentState = MENU_STATE;
 		}
 		if (currentState > END_STATE) {
 			currentState = MENU_STATE;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			moveRight = true;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			moveLeft = true;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			moveUp = true;
@@ -111,12 +114,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			moveRight = false;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			moveLeft = false;
-		}
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			moveUp = false;
 		}
@@ -130,12 +127,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	public void updateGameState() {
-		if (moveRight == true && turtle.x < 940) {
-			turtle.x += turtle.speed;
-		}
-		if (moveLeft == true && turtle.x > 10) {
-			turtle.x -= turtle.speed;
-		}
 		if (moveUp == true && turtle.y > 10) {
 			turtle.y -= turtle.speed;
 		}
@@ -147,6 +138,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		om.checkCollision();
 		if (turtle.isAlive == false) {
 			currentState = END_STATE;
+			turtle = new Turtle(10, 400, 50, 50);
+			om.reset();
+			om.addTurtle(turtle);
 		}
 	}
 
