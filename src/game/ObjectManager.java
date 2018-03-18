@@ -9,6 +9,7 @@ public class ObjectManager {
 	ArrayList<Carrot> carrots;
 	ArrayList<LuckyCharm> charms;
 	long enemyTimer;
+	long charmTimer;
 	int enemySpawnTime;
 	int charmSpawnTime;
 	int score;
@@ -18,8 +19,9 @@ public class ObjectManager {
 		carrots = new ArrayList<Carrot>();
 		charms = new ArrayList<LuckyCharm>();
 		enemyTimer = 0;
+		charmTimer = 0;
 		enemySpawnTime = 5000;
-		charmSpawnTime = new Random().nextInt(6001) + 2000;
+		charmSpawnTime = new Random().nextInt(4001) + 2000;
 		score = 0;
 	}
 
@@ -63,9 +65,9 @@ public class ObjectManager {
 	}
 
 	public void manageCharms() {
-		if (System.currentTimeMillis() - enemyTimer >= charmSpawnTime) {
-			addCharm(new LuckyCharm(new Random().nextInt(1000), FlyingTurtle.HEIGHT, 25, 25));
-
+		if (System.currentTimeMillis() - charmTimer >= charmSpawnTime) {
+			addCharm(new LuckyCharm(1000, new Random().nextInt(FlyingTurtle.HEIGHT - 100), 40, 40));
+			charmTimer = System.currentTimeMillis();
 		}
 	}
 
@@ -75,9 +77,24 @@ public class ObjectManager {
 				turtle2.isAlive = false;
 			}
 		}
+		for (LuckyCharm charm : charms) {
+			if (turtle2.collisionBox.intersects(charm.collisionBox)) {
+				charm.isAlive = false;
+			}
+		}
+	}
+
+	public void collectCharms() {
+		for (int i = 0; i < charms.size(); i++) {
+			if (charms.get(i).isAlive == false) {
+				charms.remove(i);
+				score += 1;
+			}
+		}
 	}
 
 	public void reset() {
 		carrots.clear();
+		charms.clear();
 	}
 }

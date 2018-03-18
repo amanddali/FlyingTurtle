@@ -10,8 +10,8 @@ public class Carrot extends GameObject {
 
 	public void update() {
 		super.update();
-		y += 1;
-		x -= 1;
+		y += 3;
+		x -= 3;
 	}
 
 	public void draw(Graphics g) {

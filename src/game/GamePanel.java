@@ -27,14 +27,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	ObjectManager om;
 	public static BufferedImage turtleImg;
 	public static BufferedImage carrotImg;
-	public static BufferedImage charm1Img;
-	public static BufferedImage charm2Img;
-	public static BufferedImage charm3Img;
-	public static BufferedImage charm4Img;
-	public static BufferedImage charm5Img;
-	public static BufferedImage charm6Img;
-	public static BufferedImage charm7Img;
-	public static BufferedImage charm8Img;
 
 	GamePanel() {
 		timer = new Timer(1000 / 60, this);
@@ -47,14 +39,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		try {
 			turtleImg = ImageIO.read(this.getClass().getResourceAsStream("turtle.png"));
 			carrotImg = ImageIO.read(this.getClass().getResourceAsStream("carrot.png"));
-			charm1Img = ImageIO.read(this.getClass().getResourceAsStream("charm1"));
-			charm2Img = ImageIO.read(this.getClass().getResourceAsStream("charm2"));
-			charm3Img = ImageIO.read(this.getClass().getResourceAsStream("charm3"));
-			charm4Img = ImageIO.read(this.getClass().getResourceAsStream("charm4"));
-			charm5Img = ImageIO.read(this.getClass().getResourceAsStream("charm5"));
-			charm6Img = ImageIO.read(this.getClass().getResourceAsStream("charm6"));
-			charm7Img = ImageIO.read(this.getClass().getResourceAsStream("charm7"));
-			charm8Img = ImageIO.read(this.getClass().getResourceAsStream("charm8"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -135,7 +119,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		}
 		om.update();
 		om.manageEnemies();
+		om.manageCharms();
 		om.checkCollision();
+		om.collectCharms();
 		if (turtle.isAlive == false) {
 			currentState = END_STATE;
 			turtle = new Turtle(10, 400, 50, 50);
@@ -172,7 +158,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setColor(Color.BLACK);
 		g.drawString("GAME OVER", 350, 100);
 		g.setFont(smallerFont);
-		g.drawString("you collected 0 lucky charms", 300, 250);
+		g.drawString("you collected " + om.score + " lucky charms", 300, 250);
 		g.drawString("press ENTER to restart", 340, 400);
 	}
 }
