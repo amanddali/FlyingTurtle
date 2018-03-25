@@ -8,6 +8,7 @@ public class ObjectManager {
 	Turtle turtle2;
 	ArrayList<Carrot> carrots;
 	ArrayList<LuckyCharm> charms;
+	ArrayList<Rabbit> rabbits;
 	long enemyTimer;
 	long charmTimer;
 	int enemySpawnTime;
@@ -18,6 +19,7 @@ public class ObjectManager {
 		this.turtle2 = turtle2;
 		carrots = new ArrayList<Carrot>();
 		charms = new ArrayList<LuckyCharm>();
+		rabbits = new ArrayList<Rabbit>();
 		enemyTimer = 0;
 		charmTimer = 0;
 		enemySpawnTime = 5000;
@@ -33,6 +35,9 @@ public class ObjectManager {
 		for (LuckyCharm charm : charms) {
 			charm.update();
 		}
+		for (Rabbit rabbit : rabbits) {
+			rabbit.update();
+		}
 	}
 
 	public void draw(Graphics g) {
@@ -42,6 +47,9 @@ public class ObjectManager {
 		}
 		for (LuckyCharm charm : charms) {
 			charm.draw(g);
+		}
+		for (Rabbit rabbit : rabbits) {
+			rabbit.draw(g);
 		}
 	}
 
@@ -57,9 +65,14 @@ public class ObjectManager {
 		charms.add(charm);
 	}
 
+	public void addRabbit(Rabbit rabbit) {
+		rabbits.add(rabbit);
+	}
+
 	public void manageEnemies() {
 		if (System.currentTimeMillis() - enemyTimer >= enemySpawnTime) {
 			addCarrot(new Carrot(new Random().nextInt(FlyingTurtle.WIDTH - 200), 0, 30, 80));
+			addRabbit(new Rabbit(1000, new Random().nextInt(FlyingTurtle.HEIGHT - 100), 60, 60));
 			enemyTimer = System.currentTimeMillis();
 		}
 	}
@@ -82,6 +95,11 @@ public class ObjectManager {
 				charm.isAlive = false;
 			}
 		}
+		for (Rabbit rabbit : rabbits) {
+			if (turtle2.collisionBox.intersects(rabbit.collisionBox)) {
+				turtle2.isAlive = false;
+			}
+		}
 	}
 
 	public void collectCharms() {
@@ -96,5 +114,6 @@ public class ObjectManager {
 	public void reset() {
 		carrots.clear();
 		charms.clear();
+		rabbits.clear();
 	}
 }

@@ -27,6 +27,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	ObjectManager om;
 	public static BufferedImage turtleImg;
 	public static BufferedImage carrotImg;
+	public static BufferedImage rabbitImg;
+	public static BufferedImage bgoneImg;
+	public static BufferedImage bgtwoImg;
+	int bgX;
 
 	GamePanel() {
 		timer = new Timer(1000 / 60, this);
@@ -39,9 +43,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		try {
 			turtleImg = ImageIO.read(this.getClass().getResourceAsStream("turtle.png"));
 			carrotImg = ImageIO.read(this.getClass().getResourceAsStream("carrot.png"));
+			rabbitImg = ImageIO.read(this.getClass().getResourceAsStream("rabbit.png"));
+			bgoneImg = ImageIO.read(this.getClass().getResourceAsStream("stars.jpg"));
+			bgtwoImg = ImageIO.read(this.getClass().getResourceAsStream("stars.jpg"));
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		bgX = 0;
 	}
 
 	public void startGame() {
@@ -146,8 +155,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	public void drawGameState(Graphics g) {
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, FlyingTurtle.WIDTH, FlyingTurtle.HEIGHT);
+		g.drawImage(GamePanel.starsImg, 0, 0, FlyingTurtle.WIDTH, FlyingTurtle.HEIGHT, null);
 		om.draw(g);
 	}
 
