@@ -29,7 +29,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	public static BufferedImage carrotImg;
 	public static BufferedImage rabbitImg;
 	public static BufferedImage bgoneImg;
-	public static BufferedImage bgtwoImg;
 	int bgX;
 
 	GamePanel() {
@@ -45,8 +44,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			carrotImg = ImageIO.read(this.getClass().getResourceAsStream("carrot.png"));
 			rabbitImg = ImageIO.read(this.getClass().getResourceAsStream("rabbit.png"));
 			bgoneImg = ImageIO.read(this.getClass().getResourceAsStream("stars.jpg"));
-			bgtwoImg = ImageIO.read(this.getClass().getResourceAsStream("stars.jpg"));
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -133,7 +130,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		om.collectCharms();
 		if (turtle.isAlive == false) {
 			currentState = END_STATE;
-			turtle = new Turtle(10, 400, 50, 50);
+			turtle = new Turtle(150, 225, 50, 50);
 			om.reset();
 			om.addTurtle(turtle);
 		}
@@ -155,7 +152,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	public void drawGameState(Graphics g) {
-		g.drawImage(GamePanel.starsImg, 0, 0, FlyingTurtle.WIDTH, FlyingTurtle.HEIGHT, null);
+		g.drawImage(GamePanel.bgoneImg, bgX, 0, FlyingTurtle.WIDTH, FlyingTurtle.HEIGHT, null);
+		g.drawImage(GamePanel.bgoneImg, bgX + bgoneImg.getWidth(), 0, FlyingTurtle.WIDTH, FlyingTurtle.HEIGHT, null);
+		bgX--;
+		if (bgX == -1000) {
+			bgX = 0;
+		}
 		om.draw(g);
 	}
 
