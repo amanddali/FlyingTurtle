@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -99,6 +100,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			moveDown = true;
 		}
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			JOptionPane.showMessageDialog(null,
+					"Collect lucky charms by moving up and down using the arrows. Avoid all obstacles. Good Luck!");
+		}
 		turtle.update();
 	}
 
@@ -113,7 +118,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	public void updateMenuState() {
-
+		om.score = 0;
 	}
 
 	public void updateGameState() {
